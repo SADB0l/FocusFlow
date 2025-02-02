@@ -1,0 +1,698 @@
+
+<html>
+<center>
+<style>
+        body {
+			margin-top: 5%;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+			user-select: none; 
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+        }
+		
+		.navbar-iframe {
+			height: 10%;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			border: none;
+			z-index: 1000; 
+		  }
+	  
+		img {
+			-webkit-user-drag: none; 
+			-moz-user-drag: none; 
+			user-drag: none; 
+		}
+
+		.headerofflashcard {
+			position: fixed;
+			top: 5%;
+			left: 0;
+			z-index: 800;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			border-radius: 5px;
+			background-color: white;
+			padding: 15px;
+			box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+			width: 100%;
+			transition: transform 0.3s ease-in-out;
+		}
+
+		.hidden-header {
+			transform: translateY(-67%);
+		}
+
+		.toggle-btn {
+			background-color: #fff;
+			border: none;
+			cursor: pointer;
+			padding: 8px 15px;
+			border-radius: 5px;
+			transition: background 0.3s;
+			box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+			width: 100px;
+			margin: 0 auto;
+			display: block;
+			transition: transform 0.2s ease-in-out;
+		}
+		
+		.createFcardTitle {
+			position: absolute;
+			bottom: 5px;
+			left: 50px;
+			font-size: 15px;
+			font-weight: bold;
+		}
+		
+		.cardcount {
+			position: absolute;
+			bottom: 20px;
+			right: 90px;
+			font-size: 15px;
+			font-weight: bold;
+		}
+		
+
+        .container {
+            display: flex;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            width: 100%;
+        }
+
+		.flashcard-container {
+			transform: translateY(40px);
+			display: flex;
+			flex-wrap: wrap;  
+			justify-content: flex-start;
+			align-items: flex-start;
+			column-gap: 30px;
+			max-width: 90%;
+			margin: 260px auto 20px auto; 
+			padding: 20px;
+			border-radius: 10px;
+			transition: transform 0.3s ease-in-out; 
+		}
+
+		.flashcard {
+			width: 250px;
+			height: 140px; 
+			cursor: pointer;
+			position: relative;
+			perspective: 1000px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-shrink: 0; 
+			row-gap: 5px;
+			margin-bottom: 50px;
+			transition: transform 0.2s ease-in-out;
+		}
+
+
+        .flashcard:hover {
+            transform: scale(1.05);
+			z-index: 500;
+        }
+
+        .card-inner {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			transform-style: preserve-3d;
+			transition: transform 0.6s ease-in-out;
+		}
+
+		.flashcard.flip .card-inner {
+			transform: rotateY(180deg);
+		}
+
+		.front, .back {
+			margin-top: 5px;
+			width: 90%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			backface-visibility: hidden;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 18px;
+			border-radius: 20px;
+			box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+		}
+		
+		.front:hover, .back:hover {
+			border: 1px solid;
+			box-shadow: 0 5px 2px rgba(0, 0, 0, 0.1);
+		}
+
+		.front::before, .back::before {
+			content: '';
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			width: 20px;
+			height: 20px;
+			background-color: red;
+			border-radius: 50%;
+			display: none; 
+			z-index: 1; 
+		}
+
+		/* Show Active */
+		.flashcard.active-card .front::before,
+		.flashcard.active-card .back::before {
+			display: block;
+		}
+
+		.front {
+			background-color: #fff;
+			color: #333;
+			font-weight: bold;
+			padding: 20px;
+		}
+
+		.back {
+			background-color: #4CAF50;
+			color: white;
+			transform: rotateY(180deg);
+			padding: 20px;
+		}
+	
+        .btn {
+			background-color: #fff;
+			color: white;
+			outline: 2px solid black;
+			border-radius: 20px;
+			font-size: 48px;
+			font-weight: bold;
+			text-align: center;
+			border: none;
+			width: 250px;
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-shadow: 0 6px 2px rgba(0, 0, 0, 0.2);
+			transition: transform 0.3s ease-in-out;
+		}
+		
+		.btn img {
+			border-radius: 20px;
+			height: 180px; 
+		}
+
+		.btn:hover {
+			box-shadow: 0 8px 2px rgba(0, 0, 0, 0.2);
+			transform: scale(1.05);
+			z-index: 500;
+		}
+		
+		.buttcontainer {
+		    align-items: center;
+		    justify-content: center;
+		    display: flex;
+		    max-width: 1000px;
+		    margin: 0 auto;
+		    padding: 20px;
+		    gap: 50px;
+		}
+
+		.buttcontainersmall {
+		    position: absolute;
+			top: 30%;
+		    left: 5%;
+		    display: flex;
+		    flex-direction: row; 
+		    gap: 10px; 
+		}
+		
+		.checkbx {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px; /* Space between label and checkbox */
+			padding: 5px 12px;
+			background: #ffffff;
+			border-radius: 8px;
+			box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+			cursor: pointer;
+		}
+
+		/* Style for label */
+		.checkbx label {
+			font-size: 14px;
+			color: #333;
+			font-weight: bold;
+			cursor: pointer;
+		}
+
+		.checkbx input {
+			appearance: none;
+			width: 40px;
+			height: 20px;
+			background: #ccc;
+			border-radius: 10px;
+			position: relative;
+			cursor: pointer;
+			outline: none;
+			transition: background 0.3s ease-in-out;
+		}
+
+		.checkbx input:checked {
+			background: #4CAF50;
+		}
+
+		.checkbx input::before {
+			content: "";
+			width: 18px;
+			height: 18px;
+			background: white;
+			border-radius: 50%;
+			position: absolute;
+			top: 1px;
+			left: 2px;
+			transition: transform 0.3s ease-in-out;
+		}
+
+		.checkbx input:checked::before {
+			transform: translateX(20px);
+		}
+		
+		.checkbxtxt {
+			position: absolute;
+			color: black;
+			top: 100;
+		    left: 180;
+		}
+		
+
+		.controls-container {
+		    display: flex;
+		    justify-content: space-between; /* Align buttcontainersmall to the left and buttcontainer to the right */
+		    margin-bottom: 20px; /* Space below the controls container */
+		}
+	
+		.edit-btn, .delete-btn {
+			background-color: #fff;
+			color: #202020;
+			font-size: 15px;
+			font-weight: bold;
+			text-align: center;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			width: 70px;  
+			height: 50px; 
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+			transition: transform 0.2s ease-in-out;
+		}
+		
+		.delete-all-btn, .save-btn, .shuff-btn {
+			background-color: #fff;
+			color: #202020;
+			font-size: 15px;
+			font-weight: bold;
+			text-align: center;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			width: 140px;  
+			height: 100px; 
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+			transition: transform 0.2s ease-in-out;
+		}
+
+		.delete-all-btn:hover, .edit-btn:hover, .delete-btn:hover, .save-btn:hover, .shuff-btn:hover, .toggle-btn:hover, .dl:hover {
+			transform: scale(1.10);
+			box-shadow: 0 5px 2px rgba(0, 0, 0, 0.2);
+		}
+
+		@keyframes shuffleAnimation {
+			0% { transform: translateY(0px) rotate(0deg); }
+			25% { transform: translateY(-10px) rotate(3deg); }
+			50% { transform: translateY(5px) rotate(-3deg); }
+			75% { transform: translateY(-5px) rotate(2deg); }
+			100% { transform: translateY(0px) rotate(0deg); }
+		}
+
+		.flashcard.shuffle {
+			animation: shuffleAnimation 0.3s ease-in-out;
+		}
+		
+		.upload {
+		    position: absolute;
+			top: 55%;
+		    left: 5%;
+		    display: flex;
+		    flex-direction: row; /* Stack buttons vertically */
+		    gap: 10px; /* Space between buttons */
+			margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+			height: 25px;
+		}
+		
+		.dl {
+			background-color: #fff;
+			color: #202020;
+			font-size: 15px;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			width: 100px;  
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+			transition: transform 0.2s ease-in-out;
+		}
+
+    </style>
+<body>
+
+<iframe src="C:\Users\qwert\Desktop\FocusFlow\NavigationBar.html" class="navbar-iframe" scrolling="no"></iframe>
+
+<div class="headerofflashcard" id="headerofflashcard">
+	<h2>Create Your Flashcards</h2>
+    <div class="buttcontainer">
+        <button class="delete-all-btn" id="deleteAllBtn">Delete All</button>
+        <button class="shuff-btn" onclick="shuffCard()">Shuffle</button>
+        <button class="save-btn" onclick="downloadFlashcards()">Save</button>
+    </div>		
+    <div class="upload">
+        <input type="file" id="uploadFile" accept=".json" />
+        <button class="dl" onclick="uploadFlashcards()">Upload</button>
+    </div>
+    <div class="buttcontainersmall">
+        <div class="checkbx">
+            <label for="resetFlipToggle">Reset Flip on shuffle</label>
+            <input type="checkbox" id="resetFlipToggle">
+        </div>
+        <button class="edit-btn" onclick="editCard()">Edit</button>
+        <button class="delete-btn" onclick="deleteCard()">Delete</button>
+    </div>
+	<span class="cardcount">Number of Flashcard: </span>
+	<button class="toggle-btn" id="toggleHeaderBtn" onclick="toggleHeader()">Hide ▲</button>
+	<p class="createFcardTitle" id="createFcardTitle" hidden>Create Your Flashcards</p>
+</div>
+
+    <div class="flashcard-container" id="flashcardsList">
+		<button class="btn" onclick="openadd()"><img src="AddFlashcard.png"></button>
+	</div>
+	
+</html>
+<script>
+    let openModal;
+let selectedCard = null; 
+	let editModal;
+
+function openadd() {
+    openModal = document.createElement("div");
+    openModal.style.position = "fixed";
+    openModal.style.top = "0";
+    openModal.style.left = "0";
+    openModal.style.width = "100%";
+    openModal.style.height = "100%";
+    openModal.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    openModal.style.display = "flex";
+    openModal.style.justifyContent = "center";
+    openModal.style.alignItems = "center";
+    openModal.style.zIndex = "1000";
+
+    const iframe = document.createElement("iframe");
+    iframe.src = "openadd.html"; 
+    iframe.style.width = "400px";
+    iframe.style.height = "450px";
+    iframe.style.border = "none";
+    iframe.style.borderRadius = "10px";
+    iframe.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.2)";
+
+    openModal.appendChild(iframe);
+    document.body.appendChild(openModal);
+}
+
+function closeAddModal() {
+    if (openModal) {
+        document.body.removeChild(openModal);
+        openModal = null;
+    }
+}
+
+window.addEventListener("message", function (event) {
+    if (event.data.type === "addFlashcard") {
+        addFlashcard(event.data.front, event.data.back);
+        closeAddModal();
+    } else if (event.data.type === "closeModal") {
+        closeAddModal();
+    }
+});
+
+// cardcount
+function updateFlashcardCount() {
+    const flashcardsList = document.getElementById("flashcardsList");
+    const flashcardCount = flashcardsList.querySelectorAll(".flashcard").length;
+    document.querySelector(".cardcount").textContent = `Total Number of Flashcards: ${flashcardCount}`;
+}
+
+// Flashcard Add Function
+function addFlashcard(frontText, backText) {
+    const flashcardsList = document.getElementById("flashcardsList");
+    const card = document.createElement("div");
+    card.className = "flashcard";
+
+    card.innerHTML = `
+    <div class="card-inner">
+        <div class="front">Q: ${frontText}</div>
+        <div class="back">A: ${backText}</div>
+    </div>`;
+
+    card.addEventListener('click', function () {
+        document.querySelectorAll('.flashcard').forEach(c => c.classList.remove('active-card'));
+        card.classList.add('active-card');
+        card.classList.toggle('flip'); 
+        selectedCard = card;
+    });
+
+    flashcardsList.appendChild(card);
+    updateFlashcardCount(); 
+}
+
+// EDIT FUNCTION
+function editCard() {
+    if (!selectedCard) {
+        alert("Select a flashcard to edit.");
+        return;
+    }
+
+    // Get the current front and back text of the selected card
+    const frontText = selectedCard.querySelector(".front").textContent.replace("Q: ", "");
+    const backText = selectedCard.querySelector(".back").textContent.replace("A: ", "");
+
+    // Create the edit modal
+    editModal = document.createElement("div");
+    editModal.style.position = "fixed";
+    editModal.style.top = "0";
+    editModal.style.left = "0";
+    editModal.style.width = "100%";
+    editModal.style.height = "100%";
+    editModal.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    editModal.style.display = "flex";
+    editModal.style.justifyContent = "center";
+    editModal.style.alignItems = "center";
+    editModal.style.zIndex = "1000";
+
+    const iframe = document.createElement("iframe");
+    iframe.src = `openedit.html?front=${encodeURIComponent(frontText)}&back=${encodeURIComponent(backText)}`;
+    iframe.style.width = "400px";
+    iframe.style.height = "450px";
+    iframe.style.border = "none";
+    iframe.style.borderRadius = "10px";
+    iframe.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.2)";
+
+    editModal.appendChild(iframe);
+    document.body.appendChild(editModal);
+}
+
+function closeEditModal() {
+    if (editModal) {
+        document.body.removeChild(editModal);
+        editModal = null;
+    }
+}
+
+window.addEventListener("message", function (event) {
+    if (event.data.type === "editFlashcard") {
+        selectedCard.querySelector(".front").textContent = "Q: " + event.data.front;
+        selectedCard.querySelector(".back").textContent = "A: " + event.data.back;
+
+        closeEditModal(); 
+    } else if (event.data.type === "closeModal") {
+        closeEditModal(); 
+    }
+});
+
+// DELETE FUNCTION
+function deleteCard() {
+    if (!selectedCard) {
+        alert("Select a flashcard to delete.");
+        return;
+    }
+
+    selectedCard.remove();
+    selectedCard = null;
+    updateFlashcardCount(); 
+}
+
+// DELETE ALL
+document.getElementById('deleteAllBtn').addEventListener('click', function () {
+    const flashcardsList = document.getElementById("flashcardsList");
+    flashcardsList.querySelectorAll(".flashcard").forEach(card => card.remove());
+    selectedCard = null;
+    updateFlashcardCount();
+});
+
+updateFlashcardCount();
+
+// SHUFFLE FUNCTION
+function shuffCard() {
+    let flashcardsList = document.getElementById("flashcardsList");
+    let cards = Array.from(flashcardsList.getElementsByClassName("flashcard"));
+    let resetFlip = document.getElementById("resetFlipToggle").checked; 
+
+    cards.forEach(card => {
+        card.classList.add("shuffle");
+
+        if (resetFlip && card.classList.contains("flip")) {
+            setTimeout(() => card.classList.remove("flip"), 150); 
+        }
+		
+        card.classList.remove("active-card");
+
+        setTimeout(() => card.classList.remove("shuffle"), 300); 
+    });
+
+    selectedCard = null;
+
+    // Shuffle (Fisher-Yates algorithm)
+    setTimeout(() => {
+        for (let i = cards.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            flashcardsList.appendChild(cards[j]); 
+        }
+    }, 300);
+	
+}
+
+// Download flashcard
+function downloadFlashcards() {
+    const flashcards = [];
+    document.querySelectorAll(".flashcard").forEach(card => {
+        const frontText = card.querySelector(".front").textContent.replace("Q: ", "");
+        const backText = card.querySelector(".back").textContent.replace("A: ", "");
+        flashcards.push({ frontText, backText });
+    });
+
+    const fileName = prompt("Enter a name for your flashcards:", "flashcards"); 
+    if (fileName !== null && fileName.trim() !== "") { 
+        const blob = new Blob([JSON.stringify(flashcards)], { type: "application/json" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `${fileName.trim()}.json`; 
+        link.click();
+    } else {
+        alert("Download canceled. No file name provided."); 
+    }
+}
+
+// Function to upload flashcards from a file
+function uploadFlashcards() {
+    const fileInput = document.getElementById("uploadFile");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please select a file to upload.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const flashcards = JSON.parse(event.target.result);
+        const flashcardsList = document.getElementById("flashcardsList");
+        
+        flashcards.forEach(flashcard => {
+            const card = document.createElement("div");
+            card.className = "flashcard";
+            card.innerHTML = `
+                <div class="card-inner">
+                    <div class="front">Q: ${flashcard.frontText}</div>
+                    <div class="back">A: ${flashcard.backText}</div>
+                </div>`;
+
+            card.addEventListener('click', function () {
+                document.querySelectorAll('.flashcard').forEach(c => c.classList.remove('active-card'));
+                card.classList.add('active-card');
+                card.classList.toggle('flip');
+                selectedCard = card;
+            });
+
+            flashcardsList.appendChild(card);
+        });
+
+        updateFlashcardCount(); // Update count after importing
+    };
+
+    reader.readAsText(file);
+}
+
+// header
+function toggleHeader() {
+    const header = document.getElementById("headerofflashcard");
+    const flashcardContainer = document.getElementById("flashcardsList");
+    const toggleBtn = document.getElementById("toggleHeaderBtn");
+    const createFcardTitle = document.getElementById("createFcardTitle");
+
+    if (header.classList.contains("hidden-header")) {
+        header.classList.remove("hidden-header");
+        flashcardContainer.style.transform = "translateY(40px)";  
+        toggleBtn.textContent = "Hide ▲";
+        createFcardTitle.hidden = true;  
+    } else {
+        header.classList.add("hidden-header");
+        flashcardContainer.style.transform = "translateY(-150px)"; 
+        toggleBtn.textContent = "Show ▼";
+        createFcardTitle.hidden = false;  
+    }
+}
+
+
+
+</script>
+
+
