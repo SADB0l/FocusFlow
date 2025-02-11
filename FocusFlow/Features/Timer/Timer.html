@@ -1,35 +1,43 @@
-<html>
-  <title>Pomodoro Timer</title>
-  <style>
-  
-	body {
-            margin-top: 5%;
-	}
-		
-	.navbar-iframe {
-			height: 10%;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			border: none;
-			z-index: 1000; 
-		  }
-
-	
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countdown Timer</title>
+  <link rel="stylesheet" href="../Css/Timer.css">
+  <link rel="stylesheet" href="../Css/All.css">
+</head>
+<header><iframe id="contentFrame" src="../NavBar/NavigationBar.html"></iframe>
 <body>
-<div>
-     <iframe src="C:\Users\qwert\Desktop\FocusFlow\NavigationBar.html" class="navbar-iframe" scrolling="no"></iframe>
-</div>
-    <h1>Study Time</h1>
-    <div class="timer" id="timerDisplay">
-	<p>
-      <span id="hours" contenteditable="true">00</span>:<span id="minutes" contenteditable="true">00</span>:<span id="seconds" contenteditable="true">00</span>
-	</p>
-	</div>
-    <div class="controls">
-      <button id="startStop">Start</button>
-      <button id="redo">Redo</button>
-    </div>
+		<div class="timercon">
+			<div class="div-set" id="div-set">
+				<h3>Customize Your Time</h3>
+				<label>Hour/s</label><input type="text" class="hour" id="hour">
+				<label>Minute/s</label><input type="text" class="minute" id="minute">
+				<label>Second/s</label><input type="text" class="second" id="second">
+				<button class="done-set">Change Time</button>
+			</div>
+			<div class="timer-box">
+				<div class="set-top">
+					<button class="set-time1" id="set" onclick="settime()">Set Time</button>
+					<button class="set-time2">Pomodoro Time</button>
+					<button class="set-time3" id="break">Break Time</button>
+				</div>
+				<div class="time-display" id="timerDisplay">25:00</div>
+				<div class="timer-butt">
+					<button id="startStopButton" class="timer-button" onclick="startStopTimer()">Start</button>
+					<button class="resetTimer-button" onclick="resetTimer()">Reset</button>
+				</div>
+
+				<div class="preset-container">
+
+					<div class="presets" id="presets">
+						<button class="preset-button" onclick="openPresetModal()">+</button>
+					</div>
+
+					<button class="deletePreset" onclick="deletePreset()">Delete</button>
+				</div>
+			</div>
+		</div>
 </html>
+<script src="Timer.js"></script>
